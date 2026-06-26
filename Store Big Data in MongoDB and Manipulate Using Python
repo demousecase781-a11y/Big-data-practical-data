@@ -1,0 +1,208 @@
+Practical 3: Store Big Data in MongoDB and Manipulate Using Python (PyMongo)
+
+Aim: Store data in MongoDB and manipulate it using Python (PyMongo).
+
+Software Required
+MongoDB Community Server
+Python 3.x
+VS Code (Recommended)
+PyMongo
+Step 1: Verify MongoDB Installation
+
+Open Command Prompt:
+
+mongod --version
+Step 2: Start MongoDB Server
+
+Open Command Prompt:
+
+mongod
+
+Keep this window open.
+
+Step 3: Open Another Command Prompt
+
+Start Mongo Shell:
+
+mongosh
+
+If using an older version:
+
+mongo
+Step 4: Install PyMongo
+
+Open Command Prompt:
+
+pip install pymongo
+
+Verify:
+
+pip show pymongo
+Step 5: Create Python File
+
+Create:
+
+mongo_practical.py
+Program 1: Connect MongoDB
+import pymongo
+
+client = pymongo.MongoClient("mongodb://localhost:27017/")
+
+print("MongoDB Connected Successfully")
+
+Run:
+
+python mongo_practical.py
+
+Output:
+
+MongoDB Connected Successfully
+Program 2: Create Database
+import pymongo
+
+client = pymongo.MongoClient("mongodb://localhost:27017/")
+
+db = client["mybigdata"]
+
+print(client.list_database_names())
+
+Run:
+
+python mongo_practical.py
+Program 3: Create Collection
+import pymongo
+
+client = pymongo.MongoClient("mongodb://localhost:27017/")
+
+db = client["mybigdata"]
+
+collection = db["student"]
+
+print(db.list_collection_names())
+Program 4: Insert One Record
+import pymongo
+
+client = pymongo.MongoClient("mongodb://localhost:27017/")
+
+db = client["mybigdata"]
+
+collection = db["student"]
+
+data = {
+    "name": "Aman",
+    "address": "Mumbai"
+}
+
+collection.insert_one(data)
+
+print("Data Inserted Successfully")
+
+Output:
+
+Data Inserted Successfully
+Program 5: Insert Multiple Records
+import pymongo
+
+client = pymongo.MongoClient("mongodb://localhost:27017/")
+
+db = client["mybigdata"]
+
+collection = db["student"]
+
+students = [
+
+{"name":"Rahul","address":"Mumbai"},
+
+{"name":"Riya","address":"Pune"},
+
+{"name":"Amit","address":"Delhi"},
+
+{"name":"Sneha","address":"Nashik"}
+
+]
+
+collection.insert_many(students)
+
+print("Multiple Records Inserted")
+Program 6: Display All Records
+import pymongo
+
+client = pymongo.MongoClient("mongodb://localhost:27017/")
+
+db = client["mybigdata"]
+
+collection = db["student"]
+
+for data in collection.find():
+
+    print(data)
+
+Sample Output
+
+{'_id':..., 'name':'Aman', 'address':'Mumbai'}
+
+{'_id':..., 'name':'Rahul', 'address':'Mumbai'}
+
+{'_id':..., 'name':'Riya', 'address':'Pune'}
+Program 7: Find One Record
+import pymongo
+
+client = pymongo.MongoClient("mongodb://localhost:27017/")
+
+db = client["mybigdata"]
+
+collection = db["student"]
+
+query = {"name":"Aman"}
+
+result = collection.find(query)
+
+for data in result:
+
+    print(data)
+Program 8: Update Record
+import pymongo
+
+client = pymongo.MongoClient("mongodb://localhost:27017/")
+
+db = client["mybigdata"]
+
+collection = db["student"]
+
+old = {"name":"Aman"}
+
+new = {
+
+"$set":{
+
+"address":"Thane"
+
+}
+
+}
+
+collection.update_one(old,new)
+
+print("Record Updated")
+Program 9: Delete Record
+import pymongo
+
+client = pymongo.MongoClient("mongodb://localhost:27017/")
+
+db = client["mybigdata"]
+
+collection = db["student"]
+
+collection.delete_one({"name":"Aman"})
+
+print("Record Deleted")
+Program 10: Count Records
+import pymongo
+
+client = pymongo.MongoClient("mongodb://localhost:27017/")
+
+db = client["mybigdata"]
+
+collection = db["student"]
+
+print(collection.count_documents({}))
