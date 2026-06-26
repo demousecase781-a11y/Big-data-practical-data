@@ -1,0 +1,92 @@
+Practical 2: Implement Word Count Using MapReduce
+
+Aim: Implement a Word Count program using Hadoop MapReduce.
+
+Prerequisites
+Hadoop installed and configured (Practical 1)
+Hadoop services running
+Step 1: Start Hadoop
+
+Open Command Prompt as Administrator
+
+cd C:\Hadoop\sbin
+
+Run:
+
+start-dfs.cmd
+start-yarn.cmd
+
+Check services:
+
+jps
+
+You should see:
+
+NameNode
+DataNode
+ResourceManager
+NodeManager
+Jps
+Step 2: Turn Off Safe Mode (if enabled)
+hdfs dfsadmin -safemode leave
+
+Expected Output:
+
+Safe mode is OFF
+Step 3: Create Input Directory in HDFS
+hdfs dfs -mkdir /input_dir
+
+Verify:
+
+hdfs dfs -ls /
+Step 4: Create Input File
+
+Create a file:
+
+C:\input_file.txt
+
+Write the following content:
+
+Hadoop is Big Data Framework
+Hadoop is Open Source
+Big Data is Future
+
+Save the file.
+
+Step 5: Upload File to HDFS
+hdfs dfs -put C:\input_file.txt /input_dir
+
+Verify:
+
+hdfs dfs -ls /input_dir
+
+Expected Output:
+
+Found 1 items
+/input_dir/input_file.txt
+Step 6: View File Contents
+hdfs dfs -cat /input_dir/input_file.txt
+
+Output:
+
+Hadoop is Big Data Framework
+Hadoop is Open Source
+Big Data is Future
+Step 7: Run MapReduce Word Count
+hadoop jar C:\Hadoop\share\hadoop\mapreduce\hadoop-mapreduce-examples-3.3.0.jar wordcount /input_dir /output_dir
+
+Note: If /output_dir already exists, delete it first:
+
+hdfs dfs -rm -r /output_dir
+
+Then run the command again.
+
+Step 8: Verify Output Directory
+hdfs dfs -ls /output_dir
+
+Expected Output:
+
+part-r-00000
+_SUCCESS
+Step 9: Display Output
+hdfs dfs -cat /output_dir/part-r-00000
