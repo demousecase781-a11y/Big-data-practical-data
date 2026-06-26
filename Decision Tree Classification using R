@@ -1,0 +1,26 @@
+# Install package (Run only once)
+install.packages("party")
+
+# Load package
+library(party)
+
+# Load dataset
+data(iris)
+
+# Display dataset
+head(iris)
+
+# Display structure
+str(iris)
+
+# Create Decision Tree
+iris_ctree <- ctree(
+  Species ~ Sepal.Length + Sepal.Width + Petal.Length + Petal.Width,
+  data = iris
+)
+
+# Print model
+print(iris_ctree)
+
+# Plot Decision Tree
+plot(iris_ctree)
