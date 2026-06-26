@@ -1,0 +1,83 @@
+Practical 6: Logistic Regression Using R
+Dataset
+
+This practical uses an online dataset, but you can save it locally as binary.csv.
+
+admit,gre,gpa,rank
+0,380,3.61,3
+1,660,3.67,3
+1,800,4.00,1
+1,640,3.19,4
+0,520,2.93,4
+1,760,3.00,2
+1,560,2.98,1
+0,400,3.08,2
+1,540,3.39,3
+0,700,3.92,2
+1,800,4.00,1
+0,440,3.22,4
+1,760,4.00,1
+0,700,3.08,2
+1,700,4.00,1
+0,480,3.44,3
+1,780,3.87,1
+0,360,2.56,3
+1,800,3.75,2
+0,540,3.81,3
+
+Save it as:
+
+C:/BigData/binary.csv
+
+Code
+# Install package (Run only once)
+install.packages("caTools")
+
+# Load package
+library(caTools)
+
+# Read Dataset
+college <- read.csv("C:/BigData/binary.csv")
+
+# Display Dataset
+head(college)
+
+# Split Dataset
+set.seed(123)
+
+split <- sample.split(college$admit, SplitRatio = 0.75)
+
+training_reg <- subset(college, split == TRUE)
+
+test_reg <- subset(college, split == FALSE)
+
+# Logistic Regression Model
+fit_logistic_model <- glm(
+  admit ~ gre + gpa + rank,
+  data = training_reg,
+  family = "binomial"
+)
+
+# Model Summary
+summary(fit_logistic_model)
+
+# Prediction
+predict_reg <- predict(
+  fit_logistic_model,
+  newdata = test_reg,
+  type = "response"
+)
+
+# Convert Probability to Class
+predict_binary <- ifelse(predict_reg > 0.5, 1, 0)
+
+# Confusion Matrix
+table(
+  Actual = test_reg$admit,
+  Predicted = predict_binary
+)
+
+# Conditional Density Plots
+cdplot(as.factor(admit) ~ gre, data = college)
+cdplot(as.factor(admit) ~ gpa, data = college)
+cdplot(as.factor(admit) ~ rank, data = college)
