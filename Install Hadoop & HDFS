@@ -1,0 +1,289 @@
+Practical 1: Install, Configure and Run Hadoop & HDFS
+
+Aim
+
+Install Hadoop on Windows, configure Hadoop and HDFS, and verify that Hadoop services are running successfully.
+
+Step 1: System Requirements
+Component	Version
+Windows	10/11 (64-bit)
+Java	JDK 8
+Hadoop	3.3.0
+RAM	Minimum 8 GB (4 GB also works)
+Disk Space	At least 10 GB free
+Step 2: Software Required
+
+Install these first:
+
+Java JDK 8
+Apache Hadoop 3.3.0
+7-Zip
+Winutils
+Visual C++ Redistributable
+Step 3: Install Java
+
+Install Java JDK 8.
+
+After installation, check it:
+
+Open Command Prompt
+
+java -version
+
+Expected output:
+
+java version "1.8.0_xxx"
+
+Now check
+
+javac -version
+
+Expected output
+
+javac 1.8.0_xxx
+
+If both commands work, Java is installed correctly.
+
+Step 4: Install Hadoop
+
+Extract
+
+hadoop-3.3.0.tar.gz
+
+using 7-Zip.
+
+After extracting, rename the folder to
+
+C:\Hadoop
+
+Your folder should look like
+
+C:
+│
+├── Hadoop
+│      ├── bin
+│      ├── etc
+│      ├── sbin
+│      ├── share
+│      ├── data
+│      └── ...
+Step 5: Install Winutils
+
+Download Winutils.
+
+Copy the bin folder into
+
+C:\Hadoop
+
+Replace the existing bin folder if prompted.
+
+Step 6: Create Data Folders
+
+Inside
+
+C:\Hadoop
+
+create
+
+data
+
+Inside data, create
+
+namenode
+
+and
+
+datanode
+
+Final structure
+
+C:\Hadoop
+
+│
+├── data
+│     ├── namenode
+│     └── datanode
+Step 7: Set Environment Variables
+
+Open
+
+Control Panel
+
+↓
+
+System
+
+↓
+
+Advanced System Settings
+
+↓
+
+Environment Variables
+
+Create
+
+JAVA_HOME
+C:\Program Files\Java\jdk1.8.0_xxx
+
+Create
+
+HADOOP_HOME
+C:\Hadoop
+
+Edit Path
+
+Add
+
+%JAVA_HOME%\bin
+
+Add
+
+%HADOOP_HOME%\bin
+
+Restart your computer after saving the changes.
+
+Step 8: Configure Hadoop Files
+
+Go to
+
+C:\Hadoop\etc\hadoop
+1. core-site.xml
+
+Replace everything inside <configuration> with:
+
+<configuration>
+    <property>
+        <name>fs.defaultFS</name>
+        <value>hdfs://localhost:9000</value>
+    </property>
+</configuration>
+2. hdfs-site.xml
+<configuration>
+
+<property>
+<name>dfs.replication</name>
+<value>1</value>
+</property>
+
+<property>
+<name>dfs.namenode.name.dir</name>
+<value>file:///C:/Hadoop/data/namenode</value>
+</property>
+
+<property>
+<name>dfs.datanode.data.dir</name>
+<value>file:///C:/Hadoop/data/datanode</value>
+</property>
+
+</configuration>
+3. mapred-site.xml
+
+Rename
+
+mapred-site.xml.template
+
+to
+
+mapred-site.xml
+
+Then paste
+
+<configuration>
+
+<property>
+<name>mapreduce.framework.name</name>
+<value>yarn</value>
+
+</property>
+
+</configuration>
+4. yarn-site.xml
+
+Paste
+
+<configuration>
+
+<property>
+<name>yarn.nodemanager.aux-services</name>
+<value>mapreduce_shuffle</value>
+</property>
+
+</configuration>
+
+Note: Your manual contains typos such as mapreduce_shufle and ShufleHandler. Use mapreduce_shuffle as shown above for newer Hadoop versions.
+
+Step 9: Configure hadoop-env.cmd
+
+Open
+
+hadoop-env.cmd
+
+Find
+
+JAVA_HOME=%JAVA_HOME%
+
+or the JAVA_HOME setting and set it to your JDK path, for example:
+
+set JAVA_HOME=C:\Program Files\Java\jdk1.8.0_XXX
+
+Replace XXX with your installed JDK version.
+
+Step 10: Format NameNode
+
+Open Command Prompt as Administrator
+
+Go to
+
+cd C:\Hadoop\bin
+
+Run
+
+hdfs namenode -format
+
+If successful, you'll see messages ending with something like:
+
+Storage directory has been successfully formatted
+Step 11: Start Hadoop
+
+Go to
+
+cd C:\Hadoop\sbin
+
+Run
+
+start-dfs.cmd
+
+Then
+
+start-yarn.cmd
+
+or, if available in your setup,
+
+start-all.cmd
+Step 12: Check Running Services
+
+Run
+
+jps
+
+You should see processes similar to:
+
+NameNode
+DataNode
+ResourceManager
+NodeManager
+Jps
+Step 13: Open Hadoop Web UI
+
+Open your browser and go to:
+
+http://localhost:9870
+
+If the Hadoop dashboard opens, your installation is successful.
+
+Expected Output
+Java installed successfully.
+Hadoop starts without errors.
+jps lists Hadoop services.
+The Hadoop web interface opens at http://localhost:9870.
