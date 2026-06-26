@@ -1,0 +1,72 @@
+Practical: Apriori Algorithm (Association Rule Mining)
+Dataset
+
+Uses the built-in Groceries dataset.
+
+No CSV file is required.
+
+Code
+# Install Packages (Run only once)
+install.packages("arules")
+install.packages("arulesViz")
+install.packages("RColorBrewer")
+
+# Load Packages
+library(arules)
+library(arulesViz)
+library(RColorBrewer)
+
+# Load Dataset
+data("Groceries")
+
+# Display Dataset Summary
+summary(Groceries)
+
+# Generate Association Rules
+rules <- apriori(
+  Groceries,
+  parameter = list(supp = 0.02, conf = 0.2)
+)
+
+# Display Summary
+summary(rules)
+
+# Show First 10 Rules
+inspect(rules[1:10])
+
+# Item Frequency Plot
+itemFrequencyPlot(
+  Groceries,
+  topN = 20,
+  col = brewer.pal(8, "Pastel2"),
+  main = "Relative Item Frequency Plot",
+  type = "relative"
+)
+
+# Frequent Itemsets (2 Items)
+itemsets <- apriori(
+  Groceries,
+  parameter = list(
+    minlen = 2,
+    maxlen = 2,
+    support = 0.02,
+    target = "frequent itemsets"
+  )
+)
+
+summary(itemsets)
+inspect(itemsets)
+
+# Frequent Itemsets (3 Items)
+itemsets3 <- apriori(
+  Groceries,
+  parameter = list(
+    minlen = 3,
+    maxlen = 3,
+    support = 0.02,
+    target = "frequent itemsets"
+  )
+)
+
+summary(itemsets3)
+inspect(itemsets3)
