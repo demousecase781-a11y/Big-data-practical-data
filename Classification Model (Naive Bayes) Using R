@@ -1,0 +1,51 @@
+Practical 8: Classification Model (Naive Bayes) Using R
+Dataset
+
+This practical uses the built-in iris dataset in R.
+
+No CSV file is required.
+
+Code
+# Install Packages (Run only once)
+install.packages("e1071")
+install.packages("caTools")
+install.packages("caret")
+
+# Load Packages
+library(e1071)
+library(caTools)
+library(caret)
+
+# Load Dataset
+data(iris)
+
+# Display Dataset
+head(iris)
+
+# Display Structure
+str(iris)
+
+# Split Dataset
+set.seed(120)
+
+split <- sample.split(iris$Species, SplitRatio = 0.7)
+
+train_c1 <- subset(iris, split == TRUE)
+test_c1 <- subset(iris, split == FALSE)
+
+# Train Naive Bayes Classifier
+classifier_c1 <- naiveBayes(Species ~ ., data = train_c1)
+
+# Display Model
+print(classifier_c1)
+
+# Predict Test Data
+y_pred <- predict(classifier_c1, newdata = test_c1)
+
+# Confusion Matrix
+cm <- table(test_c1$Species, y_pred)
+
+print(cm)
+
+# Accuracy Report
+confusionMatrix(cm)
