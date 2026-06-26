@@ -1,0 +1,80 @@
+Practical 9: Clustering Model (K-Means) Using R
+Dataset
+
+Create a CSV file named grades_km_input.csv.
+
+Student,English,Math,Science
+S1,78,82,80
+S2,65,70,68
+S3,90,92,95
+S4,55,60,58
+S5,85,88,90
+S6,72,75,70
+S7,95,98,96
+S8,60,62,65
+S9,88,85,89
+S10,70,68,72
+S11,50,55,52
+S12,92,94,91
+S13,80,79,82
+S14,58,57,60
+S15,75,78,76
+
+Save it as:
+
+C:/BigData/grades_km_input.csv
+Code
+# Install Packages (Run only once)
+install.packages("plyr")
+install.packages("ggplot2")
+install.packages("cluster")
+install.packages("lattice")
+install.packages("gridExtra")
+
+# Load Packages
+library(plyr)
+library(ggplot2)
+library(cluster)
+library(lattice)
+library(grid)
+library(gridExtra)
+
+# Read Dataset
+grade_input <- read.csv("C:/BigData/grades_km_input.csv")
+
+# Prepare Data
+kmdata_orig <- as.matrix(grade_input[, c("Student","English","Math","Science")])
+
+kmdata <- kmdata_orig[,2:4]
+
+# Elbow Method
+wss <- numeric(15)
+
+for(k in 1:15)
+{
+  wss[k] <- sum(kmeans(kmdata, centers = k, nstart = 25)$withinss)
+}
+
+plot(
+  1:15,
+  wss,
+  type = "b",
+  xlab = "Number of Clusters",
+  ylab = "Within Sum of Squares"
+)
+
+# K-Means Clustering
+km <- kmeans(kmdata, centers = 3, nstart = 25)
+
+print(km)
+
+# Create Data Frame
+df <- data.frame(kmdata)
+
+df$cluster <- factor(km$cluster)
+
+centers <- as.data.frame(km$centers)
+
+# Plot 1
+g1 <- ggplot(df, aes(English, Math, color = cluster)) +
+  geom_point(size = 3)
